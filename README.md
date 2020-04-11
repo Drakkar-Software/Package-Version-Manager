@@ -16,5 +16,5 @@ python -m pip install -r requirements.txt
 
 ## Usage:
 ```shell script
-python cly.py -d "/my/repo/container/folder"
+python cli.py -d "/my/repo/container/folder"
 ```
