@@ -23,8 +23,7 @@ def register_arguments(tentacles_parser) -> None:
                                   type=str,
                                   default=DEFAULT_CONFIG_FILE)
     tentacles_parser.add_argument("-d", "--target-directory",
-                                  help="Path to the target directory to process. "
-                                                                   "Default is '.'",
+                                  help="Path to the target directory to process. Default is '.'",
                                   type=str,
                                   default=".")
     tentacles_parser.add_argument("-f", "--skip-confirmations",
