@@ -1,0 +1,15 @@
+changelog-file: CHANGELOG.md
+readme-file: README.md
+version-constant-file: __init__.py
+
+remote-name: origin
+
+version-regex: >
+  ## \[(.+)\]
+version-constant: VERSION
+
+version-branch-prefix: VERSION_
+version-commit-prefix: >
+  [Version] v
+
+pull-request-url-prefix:
