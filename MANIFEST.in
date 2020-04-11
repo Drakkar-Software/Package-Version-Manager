@@ -1,0 +1,6 @@
+include config.yml
+include logging_config.ini
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements.txt
