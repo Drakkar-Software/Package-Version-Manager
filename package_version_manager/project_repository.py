@@ -28,14 +28,17 @@ class ProjectRepository:
         # version is to update when changelog has a new entry
         changelog_file = join(self.entry, self.config[CHANGELOG_FILE])
         if isfile(changelog_file):
-            diff = self.repo.git.diff(self.config[CHANGELOG_FILE])
-            matched_groups = ProjectRepository.VERSION_REGEX.findall(diff)
-            if matched_groups:
-                self.new_version = matched_groups[0]
-                self.logger.info(f"New version found: {self.new_version}")
-                self._find_previous_version(changelog_file)
-                self.updated_files.append(changelog_file)
-                return True
+            try:
+                diff = self.repo.git.diff(self.config[CHANGELOG_FILE])
+                matched_groups = ProjectRepository.VERSION_REGEX.findall(diff)
+                if matched_groups:
+                    self.new_version = matched_groups[0]
+                    self.logger.info(f"New version found: {self.new_version}")
+                    self._find_previous_version(changelog_file)
+                    self.updated_files.append(changelog_file)
+                    return True
+            except Exception as e:
+                self.logger.error(f"Error while analysing repository, this one will be ignored ({e})")
         return False
 
     def update_version(self):

@@ -1,5 +1,5 @@
 # Package-version-manager
-Toolkit to automate packages version update
+A toolkit to automate packages version update
 
 This toolkit will:
 1. Look for changes in a changelog file
