@@ -1,11 +1,12 @@
 #  Drakkar-Software Package-Version-Manager
 import re
+import subprocess
 from os.path import join, isfile, sep
 from git import Repo
 from logging import getLogger
 
 from package_version_manager.constants import CHANGELOG_FILE, VERSION_REGEX, VERSION_CONSTANT_FILE, VERSION_CONSTANT, \
-    README_FILE, VERSION_COMMIT_PREFIX, VERSION_BRANCH_PREFIX, REMOTE_NAME
+    README_FILE, VERSION_COMMIT_PREFIX, VERSION_BRANCH_PREFIX, REMOTE_NAME, REQUIREMENTS_FILE
 
 
 class ProjectRepository:
@@ -52,6 +53,14 @@ class ProjectRepository:
             to_add_file = file_path.split(self.entry.path + sep)[-1]
             self.repo.git.add(to_add_file)
         self.repo.index.commit(f"{self.config[VERSION_COMMIT_PREFIX].strip()}{self.new_version}")
+
+    def update_requirements(self):
+        try:
+            process = subprocess.Popen(["pur", "-r", REQUIREMENTS_FILE], cwd=self.entry)
+            process.wait()
+            self.updated_files.append(join(self.entry, REQUIREMENTS_FILE))
+        except Exception as e:
+            self.logger.exception(f"Failed tu update {REQUIREMENTS_FILE} : {e}")
 
     def push_version_branch(self):
         remote = self.config[REMOTE_NAME].strip()

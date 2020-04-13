@@ -20,8 +20,10 @@ def get_resource_or_file_name(file_name: str):
         return file_name
 
 
-def handle_package_version_manager_command(target_dir, configuration, skip_confirmations=False):
-    crawler = DirectoryCrawler(target_dir, configuration, skip_confirmations)
+def handle_package_version_manager_command(target_dir, configuration,
+                                           skip_confirmations=False,
+                                           skip_requirements_update=False):
+    crawler = DirectoryCrawler(target_dir, configuration, skip_confirmations, skip_requirements_update)
     crawler.find_repos_to_update()
     crawler.update_repos()
 
@@ -38,6 +40,9 @@ def register_arguments(tentacles_parser) -> None:
     tentacles_parser.add_argument("-f", "--skip-confirmations",
                                   help="Skip user confirmations.",
                                   action="store_true")
+    tentacles_parser.add_argument("-s", "--skip-requirements-update",
+                                  help="Skip requirements update.",
+                                  action="store_true")
 
 
 def _load_config(file_name):
@@ -51,7 +56,9 @@ def main():
     register_arguments(parser)
     args = parser.parse_args(sys.argv[1:])
     config = _load_config(args.config)
-    sys.exit(handle_package_version_manager_command(abspath(args.target_directory), config, args.skip_confirmations))
+    sys.exit(handle_package_version_manager_command(abspath(args.target_directory), config,
+                                                    args.skip_confirmations,
+                                                    args.skip_requirements_update))
 
 
 if __name__ == "__main__":
