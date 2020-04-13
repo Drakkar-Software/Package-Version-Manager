@@ -2,6 +2,7 @@
 
 DEFAULT_CONFIG_FILE = "config.yml"
 LOGGING_CONFIG_FILE = "logging_config.ini"
+REQUIREMENTS_FILE = "requirements.txt"
 
 # CONFIG KEYS
 CHANGELOG_FILE = "changelog-file"

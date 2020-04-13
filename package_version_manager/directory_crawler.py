@@ -7,10 +7,11 @@ from package_version_manager.project_repository import ProjectRepository
 
 
 class DirectoryCrawler:
-    def __init__(self, target_dir, config, skip_confirmations):
+    def __init__(self, target_dir, config, skip_confirmations, skip_requirements_update):
         self.target_dir = target_dir
         self.config = config
         self.skip_confirmations = skip_confirmations
+        self.skip_requirements_update = skip_requirements_update
         self.to_update_project_repositories = []
         self.logger = getLogger(DirectoryCrawler.__name__)
 
@@ -22,6 +23,8 @@ class DirectoryCrawler:
     def update_repos(self):
         for repo in self.to_update_project_repositories:
             repo.update_version()
+            if not self.skip_requirements_update:
+                repo.update_requirements()
             repo.commit_in_version_branch()
             if not self.skip_confirmations:
                 user_input = input(f"Push version branch for {repo.entry.name} ? Y/n")
