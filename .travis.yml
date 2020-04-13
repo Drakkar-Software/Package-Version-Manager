@@ -1,0 +1,35 @@
+notifications:
+  email: false
+dist: xenial
+os: linux
+language: python
+python: 3.8-dev
+cache: pip
+env:
+  global:
+    - GH_REPO=Drakkar-Software/Package-Version-Manager
+    - DEPLOY_BRANCH=master
+    - PACKAGE_FOLDER=package_version_manager
+
+install:
+  - python3 -m pip install --prefer-binary -r dev_requirements.txt -r requirements.txt
+
+jobs:
+  include:
+    - name: "Linux - Python 3 - Deploy"
+      stage: deploy
+      script:
+        - ls
+      deploy:
+        - provider: pypi
+          username: __token__
+          password:
+            secure: RiXYNejZBaUWNLzur9ozTjhwRC9MSiIEF9RCUHYnyRE1zj4i4ow4/mKf5xCZ9g88KyLRxygum5GntMi5zbk7lxUXABA67o0FG6hJbBhF+nM+tqBeHslyb/yuQIAGtk5jzauQb7RLOJBDbVhUCDbHeAhU/reTH3UA8TCgl3l708kgFDtqco3Rq6alGjxENssEKIBBeTZHkDsw/HJu4UlII0edgvoXISynTKgti+fF3IFZ8Ymp5426JAcwYP8WXgFLwAAYG35j+XpjvXtrFVpMhFonze6R8eR+BNnpehqDU5NSCLAfQhT9thPhNIu3ONgK26mHiq/exeNeZwlWZR9mvwt4lJR/ndX/MPDy/QkMa1IprtigQAScL3C0g9iGR6obPL4OfDlmxAlFxfLnBM2uaKlvtobU6KqnEZFW63yBrFRabeNyUIj75DuLxETdCyIc7vRuF4F8lXHgfzq9HD9zy1cRa6+fwr3H6wAV540wnelUhOePFGCLxxTnc5bOCgwSZtJJ2bldIStHU6d8ahjJPBGg/CJCnmwD0lavYnfjX4GnYnklaq4U6byrdMeDO4sZiRu7Axnrdf1gdivBkfSSZYTcjgtQFa/BSVtsS72pAJQIyJvV8D9MnHtAG+SG6FGoK9J53UIvR1qy/dM1Y3wsK5kCh8SRNHZINLhmgJmBg24=
+          skip_existing: true
+          cleanup: true
+          distributions: "sdist bdist_egg"
+          on:
+            repo: $GH_REPO
+            branch: $DEPLOY_BRANCH
+            tags: true
+            condition: $TRAVIS_OS_NAME = 'linux'
