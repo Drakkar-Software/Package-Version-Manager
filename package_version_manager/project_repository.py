@@ -46,9 +46,10 @@ class ProjectRepository:
         self._update_version_constant()
         self._update_readme_file()
 
-    def commit_in_version_branch(self):
-        self.update_branch = f"{self.config[VERSION_BRANCH_PREFIX].strip()}{self.new_version}"
-        self.repo.git.checkout(b=self.update_branch)
+    def commit_in_version_branch(self, skip_new_branch_creation):
+        if not skip_new_branch_creation:
+            self.update_branch = f"{self.config[VERSION_BRANCH_PREFIX].strip()}{self.new_version}"
+            self.repo.git.checkout(b=self.update_branch)
         for file_path in self.updated_files:
             to_add_file = file_path.split(self.entry.path + sep)[-1]
             self.repo.git.add(to_add_file)
