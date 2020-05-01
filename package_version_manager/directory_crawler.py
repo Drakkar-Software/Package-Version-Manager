@@ -20,12 +20,12 @@ class DirectoryCrawler:
             if entry.is_dir():
                 self._register_repo_if_relevant(entry)
 
-    def update_repos(self):
+    def update_repos(self, skip_new_branch_creation):
         for repo in self.to_update_project_repositories:
             repo.update_version()
             if not self.skip_requirements_update:
                 repo.update_requirements()
-            repo.commit_in_version_branch()
+            repo.commit_in_version_branch(skip_new_branch_creation)
             if not self.skip_confirmations:
                 user_input = input(f"Push version branch for {repo.entry.name} ? Y/n")
                 if user_input.lower() in ["n", "no"]:
