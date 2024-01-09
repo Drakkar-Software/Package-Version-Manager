@@ -1,10 +1,10 @@
 #  Drakkar-Software Package-Version-Manager
 import argparse
 import sys
+import os
+import pathlib
 from logging.config import fileConfig
-from os.path import abspath
 
-from pkg_resources import resource_filename
 from yaml import load, FullLoader
 
 from package_version_manager import PROJECT_NAME
@@ -14,10 +14,10 @@ from package_version_manager.directory_crawler import DirectoryCrawler
 
 
 def get_resource_or_file_name(file_name: str):
-    try:
-        return resource_filename(__name__, file_name)
-    except FileNotFoundError:
-        return file_name
+    package_config = os.path.join(pathlib.Path(__file__).parent.absolute(), file_name)
+    if os.path.isfile(package_config):
+        return package_config
+    return file_name
 
 
 def handle_package_version_manager_command(target_dir, configuration,
@@ -60,7 +60,7 @@ def main():
     register_arguments(parser)
     args = parser.parse_args(sys.argv[1:])
     config = _load_config(args.config)
-    sys.exit(handle_package_version_manager_command(abspath(args.target_directory), config,
+    sys.exit(handle_package_version_manager_command(os.path.abspath(args.target_directory), config,
                                                     args.skip_confirmations,
                                                     args.skip_requirements_update,
                                                     args.just_commit_and_push))
