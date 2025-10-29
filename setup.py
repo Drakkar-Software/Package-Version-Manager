@@ -10,7 +10,7 @@ REQUIRED = open('requirements.txt').readlines()
 REQUIRES_PYTHON = '>=3.7'
 
 setup(
-    name=PROJECT_NAME,
+    name=PROJECT_NAME.lower().replace("-", "_"),
     version=VERSION,
     url='https://github.com/Drakkar-Software/Package-Version-Manager',
     license='MIT',
